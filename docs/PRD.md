@@ -5,8 +5,8 @@
 **NexStep** is a lightweight, full-stack placement portal designed to streamline campus hiring for college students, recruiting companies, and the placement officer (TPO). 
 
 Instead of dealing with scattered Google Sheets and manual emails, NexStep provides a clean, single-hub web application where:
-1. **Students** create profiles, view campus drives they are eligible for, and apply with their resume.
-2. **Companies** post job openings, review applicant profiles, and update candidate statuses (Shortlist / Select / Reject).
+1. **Students** create profiles, view campus drives they are eligible for, apply with their resume, and attend scheduled online interviews.
+2. **Companies** post job openings, review applicant profiles, schedule online interviews with instant video links, and update candidate statuses (Shortlist / Select / Reject).
 3. **Placement Officers (Admin)** oversee all drives, verify companies, and view high-level placement statistics.
 
 ---
@@ -17,8 +17,8 @@ We keep the system lean and practical with **3 core roles**:
 
 | Role | Access Scope | Key Actions |
 |---|---|---|
-| **Student** | Student Portal | Register, build academic profile, upload resume link, browse eligible drives, apply, track application status. |
-| **Recruiter** | Recruiter Portal | Register company, post drives with eligibility criteria (Min CGPA, Allowed Branches, Max Backlogs), review applicants, update hiring status. |
+| **Student** | Student Portal | Register, build academic profile, upload resume link, browse eligible drives, apply, track status, join scheduled video interviews. |
+| **Recruiter** | Recruiter Portal | Register company, post drives with eligibility criteria (Min CGPA, Allowed Branches, Max Backlogs), review applicants, schedule online interviews, update hiring status. |
 | **Admin (TPO)** | Admin Cockpit | Verify companies/drives, monitor all applicants, view placement dashboard (Placed %, Avg Package, Total Offers). |
 
 ---
@@ -31,6 +31,7 @@ No heavy message queues, no microservices, no Redis workers. A straightforward, 
 - **Backend:** Node.js + Express.js (REST API).
 - **Database:** MongoDB Atlas (Mongoose ODM).
 - **Authentication:** JWT (JSON Web Tokens) with passwords hashed using `bcryptjs`.
+- **Online Interviews:** Free instant video meeting room generation via **Jitsi Meet** (`meet.jit.si`) or custom Google Meet link.
 - **File / Resume Storage:** PDF upload via Cloudinary or direct resume URL link.
 - **Transactional Email:** Direct **Resend** Node SDK API calls (no Redis/BullMQ required).
 
@@ -51,7 +52,10 @@ No heavy message queues, no microservices, no Redis workers. A straightforward, 
                                 │
                 ┌───────────────┴───────────────┐
                 ▼                               ▼
-       [Shortlist / Interview]              [Reject]
+     [Shortlist & Schedule Interview]       [Reject]
+     • Free Jitsi video room link
+     • Resend email sent to student
+     • "Join Interview" on dashboard
                 │
                 ▼
       [Select / Offer Extended]
@@ -77,18 +81,22 @@ No heavy message queues, no microservices, no Redis workers. A straightforward, 
   - When a student browses drives, the portal compares their profile against the criteria.
   - Clear badge: **"Eligible"** (green) vs **"Not Eligible"** (with exact reason: e.g. "Requires CGPA >= 7.5; your CGPA is 7.1").
 
-### 5.3 Applications & Status Tracking
+### 5.3 Applications, Shortlisting & Online Interviews
 - Eligible student clicks "Apply Now" $\rightarrow$ Application submitted.
 - Application Status Lifecycle:
   `APPLIED` $\longrightarrow$ `SHORTLISTED` $\longrightarrow$ `SELECTED` (or `REJECTED`).
-- Student sees a live tracker of all their applications.
-- Recruiter sees a filtered table of applicants with resume links and 1-click status update buttons.
+- **Online Interview Scheduling:**
+  - Recruiter clicks "Shortlist for Interview" $\rightarrow$ modal prompts for Date/Time, auto-generates a free instant **Jitsi Meet** room URL (`https://meet.jit.si/NexStep-Interview-...`) or accepts a Google Meet link.
+  - Meeting details saved in DB and emailed immediately to the student via Resend.
+  - Student dashboard displays a direct **"Join Interview"** button.
+- Recruiter marks final decision: `SELECTED` (Placed!) or `REJECTED`.
 
 ### 5.4 Simple Email Alerts (Resend)
 Direct, synchronous Resend API calls on key events:
 1. **Welcome / Account Confirmation** (on signup).
 2. **Application Confirmation** (to student on apply).
-3. **Status Update Alert** (to student when shortlisted or selected).
+3. **Interview Scheduled Alert** (to student when shortlisted, containing meeting link, date, time, and instructions).
+4. **Final Selection Alert** (to student when selected/placed).
 
 ### 5.5 Admin Dashboard
 - Total registered students, total drives, total applications.
