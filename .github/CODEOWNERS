@@ -1,0 +1,41 @@
+# NexStep — Code Owners Specification (Mini Project)
+
+# Default fallback (Tech Lead)
+* @m1-tech-lead
+
+# Setup, Tooling & Workflows
+/.github/workflows/          @m1-tech-lead
+/package.json                @m1-tech-lead
+
+# Member 1: Auth & User Management
+/server/routes/auth.js       @m1-tech-lead
+/server/middleware/auth.js   @m1-tech-lead
+/server/models/User.js       @m1-tech-lead
+/client/src/pages/auth/      @m1-tech-lead
+
+# Member 2: Student Profile & Resume Link
+/server/routes/student.js    @m2-student-lead
+/server/models/StudentProfile.js @m2-student-lead
+/client/src/pages/student/Profile.jsx @m2-student-lead
+
+# Member 3: Recruiter Portal & Drive Posting
+/server/routes/company.js    @m3-company-lead
+/server/models/Company.js    @m3-company-lead
+/client/src/pages/recruiter/ @m3-company-lead
+
+# Member 4: Drives Catalog & Eligibility Check
+/server/routes/drives.js     @m4-drives-lead
+/server/models/JobDrive.js   @m4-drives-lead
+/server/utils/eligibility.js @m4-drives-lead
+/client/src/pages/student/Drives.jsx @m4-drives-lead
+
+# Member 5: Applications & Hiring Pipeline
+/server/routes/applications.js @m5-pipeline-lead
+/server/models/Application.js  @m5-pipeline-lead
+/client/src/pages/student/Applications.jsx @m5-pipeline-lead
+/client/src/pages/recruiter/Applicants.jsx @m5-pipeline-lead
+
+# Member 6: Admin Dashboard & Resend Email Alerts
+/server/routes/admin.js      @m6-insights-lead
+/server/utils/mailer.js      @m6-insights-lead
+/client/src/pages/admin/     @m6-insights-lead
