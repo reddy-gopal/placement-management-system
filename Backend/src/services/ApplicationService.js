@@ -7,6 +7,7 @@ import { createError } from '../utils/errors.js'
 import { canChangeStatus, expireOverdueOffers, getEligibilityIssues, getOfferDeadline } from '../helper.js'
 
 export const applyForDrive = async (student, driveId) => {
+    if (!driveId) throw createError('driveId is required')
     if (student.isPlaced) throw createError('You have already accepted an offer', 403)
 
     const drive = await JobDrive.findById(driveId)
@@ -64,7 +65,7 @@ export const updateApplicationStatus = async (
     applicationId,
     userId,
     role,
-    { status, interview, offerDeadline } = {}
+    { status, interviewDate, meetingLink, notes, offerDeadline } = {}
 ) => {
     if (![Role.RECRUITER, Role.ADMIN].includes(role))
         throw createError('Only recruiters and admins can update applications', 403)
@@ -87,16 +88,12 @@ export const updateApplicationStatus = async (
 
     if (application.offer.status === OfferStatus.ACCEPTED) throw createError('An accepted offer cannot be changed')
 
-    if (status === ApplicationStatus.SHORTLISTED && interview) {
-        const scheduledAt = new Date(interview.scheduledAt)
+    if (status === ApplicationStatus.SHORTLISTED && interviewDate) {
+        const scheduledAt = new Date(interviewDate)
         if (isNaN(scheduledAt) || scheduledAt <= new Date())
             throw createError('Interview must be scheduled at a valid future date and time')
 
-        application.interview = {
-            scheduledAt,
-            meetingLink: interview.meetingLink ?? null,
-            notes: interview.notes ?? null
-        }
+        application.interview = { scheduledAt, meetingLink: meetingLink ?? null, notes: notes ?? null }
     }
 
     if (status === ApplicationStatus.SELECTED) {

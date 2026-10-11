@@ -17,14 +17,13 @@ import {
 const router = express.Router()
 
 // Auth routes
-router.post('/auth/register', AuthController.register)
+router.post('/auth/signup', AuthController.signup)
 router.post('/auth/login', AuthController.login)
 router.get('/auth/me', authenticate, AuthController.me)
 
 // Student routes
-router.get('/students/me', authenticate, studentOnly, studentProfileExists, StudentController.getProfile)
-router.post('/students/me', authenticate, studentOnly, StudentController.createProfile)
-router.put('/students/me', authenticate, studentOnly, studentProfileExists, StudentController.updateProfile)
+router.get('/student/profile', authenticate, studentOnly, StudentController.getMyProfile)
+router.post('/student/profile', authenticate, studentOnly, StudentController.saveMyProfile)
 router.get('/students', authenticate, adminOnly, StudentController.getAllProfiles)
 router.get('/students/:studentId', authenticate, StudentController.getProfileById)
 router.delete('/students/:studentId', authenticate, adminOnly, StudentController.deleteProfile)
@@ -47,15 +46,9 @@ router.patch('/drives/:driveId/status', authenticate, JobDriveController.updateD
 router.delete('/drives/:driveId', authenticate, JobDriveController.deleteDrive)
 
 // Application routes
-router.post(
-    '/drives/:driveId/apply',
-    authenticate,
-    studentOnly,
-    studentProfileExists,
-    ApplicationController.applyForDrive
-)
-router.get('/drives/:driveId/applications', authenticate, ApplicationController.getDriveApplications)
-router.get('/applications/me', authenticate, studentOnly, studentProfileExists, ApplicationController.getMyApplications)
+router.post('/applications/apply', authenticate, studentOnly, studentProfileExists, ApplicationController.applyForDrive)
+router.get('/applications/my', authenticate, studentOnly, studentProfileExists, ApplicationController.getMyApplications)
+router.get('/applications/drive/:driveId', authenticate, ApplicationController.getDriveApplications)
 router.patch('/applications/:applicationId/status', authenticate, ApplicationController.updateApplicationStatus)
 router.patch(
     '/applications/:applicationId/offer',

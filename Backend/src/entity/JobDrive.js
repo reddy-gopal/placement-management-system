@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { EmploymentType, JobDriveStatus } from '../enum.js'
+import { Branch, EmploymentType, JobDriveStatus } from '../enum.js'
 const jobDriveSchema = new mongoose.Schema(
     {
         companyId: {
@@ -58,7 +58,7 @@ const jobDriveSchema = new mongoose.Schema(
             },
 
             allowedBranches: {
-                type: [String],
+                type: [{ type: String, trim: true, uppercase: true, enum: Object.values(Branch) }],
                 default: []
             }
         },

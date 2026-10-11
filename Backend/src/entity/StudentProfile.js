@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { Branch } from '../enum.js'
 
 const studentProfileSchema = new mongoose.Schema(
     {
@@ -19,7 +20,9 @@ const studentProfileSchema = new mongoose.Schema(
         branch: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
+            uppercase: true,
+            enum: Object.values(Branch)
         },
 
         graduationYear: {

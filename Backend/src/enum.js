@@ -25,6 +25,15 @@ export const OfferStatus = Object.freeze({
     EXPIRED: 'EXPIRED'
 })
 
+export const Branch = Object.freeze({
+    CSE: 'CSE',
+    IT: 'IT',
+    ECE: 'ECE',
+    EEE: 'EEE',
+    MECH: 'MECH',
+    CIVIL: 'CIVIL'
+})
+
 export const EmploymentType = Object.freeze({
     FULL_TIME: 'FULL_TIME',
     INTERNSHIP: 'INTERNSHIP',

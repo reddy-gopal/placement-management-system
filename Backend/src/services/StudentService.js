@@ -31,7 +31,18 @@ export const getStudentProfileById = async (studentId, userId, role) => {
 
 export const getAllStudentProfiles = () => StudentProfile.find()
 
-export const createStudentProfile = async (userId, data = {}) => {
+// null when the student hasn't created a profile yet
+export const getMyProfile = (userId) => StudentProfile.findOne({ userId })
+
+// POST /student/profile creates the profile the first time and updates it after that
+export const saveMyProfile = async (userId, data = {}) => {
+    const existing = await StudentProfile.findOne({ userId })
+
+    if (!existing) return { profile: await createStudentProfile(userId, data), created: true }
+    return { profile: await updateStudentProfile(existing, data), created: false }
+}
+
+const createStudentProfile = async (userId, data) => {
     const { rollNumber, branch, graduationYear, cgpa, activeBacklogs, skills, resumeUrl } = data
 
     if (!rollNumber || !branch || graduationYear === undefined || cgpa === undefined)
@@ -55,7 +66,7 @@ export const createStudentProfile = async (userId, data = {}) => {
     })
 }
 
-export const updateStudentProfile = async (student, data = {}) => {
+const updateStudentProfile = async (student, data) => {
     if (data.rollNumber !== undefined && data.rollNumber !== student.rollNumber) {
         const rollNumberTaken = await StudentProfile.exists({ rollNumber: data.rollNumber })
         if (rollNumberTaken) throw createError('Roll number already exists', 409)
