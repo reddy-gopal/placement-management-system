@@ -5,7 +5,9 @@
   "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test",
+    "test:m3": "node --test test/m3/*.test.js",
+    "test:m3:db": "node --test integration/*.integration.js",
     "dev": "node src/server.js",
     "devr": "nodemon src/server.js",
     "format": "prettier --write src"
@@ -25,6 +27,7 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "mongodb-memory-server": "^11.3.0",
     "prettier": "^3.3.3"
   }
 }

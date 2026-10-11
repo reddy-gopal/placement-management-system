@@ -13,6 +13,7 @@ import {
     companyProfileExists,
     adminOnly
 } from '../middlewares/index.js'
+import recruiterRouter from '../modules/recruiter/routes.js'
 
 const router = express.Router()
 
@@ -72,5 +73,8 @@ router.get('/admin/recruiters', authenticate, adminOnly, AdminController.getAllR
 router.get('/admin/companies', authenticate, adminOnly, AdminController.getAllCompanies)
 router.get('/admin/drives', authenticate, adminOnly, AdminController.getAllDrives)
 router.get('/admin/applications', authenticate, adminOnly, AdminController.getAllApplications)
+
+// M3 is isolated behind the M1 authentication contract (req.user.id + role).
+router.use('/recruiter', authenticate, recruiterRouter)
 
 export default router
