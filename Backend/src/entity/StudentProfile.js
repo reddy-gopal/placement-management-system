@@ -1,75 +1,75 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose'
 
 const studentProfileSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-      unique: true
-    },
+    {
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+            unique: true
+        },
 
-    rollNumber: {
-      type: String,
-      required: true,
-      unique: true,
-      trim: true
-    },
+        rollNumber: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true
+        },
 
-    branch: {
-      type: String,
-      required: true,
-      trim: true
-    },
+        branch: {
+            type: String,
+            required: true,
+            trim: true
+        },
 
-    graduationYear: {
-      type: Number,
-      required: true
-    },
+        graduationYear: {
+            type: Number,
+            required: true
+        },
 
-    cgpa: {
-      type: Number,
-      required: true,
-      min: 0,
-      max: 10
-    },
+        cgpa: {
+            type: Number,
+            required: true,
+            min: 0,
+            max: 10
+        },
 
-    activeBacklogs: {
-      type: Number,
-      default: 0,
-      min: 0
-    },
+        activeBacklogs: {
+            type: Number,
+            default: 0,
+            min: 0
+        },
 
-    skills: {
-      type: [String],
-      default: []
-    },
+        skills: {
+            type: [String],
+            default: []
+        },
 
-    resumeUrl: {
-      type: String,
-      default: null
-    },
+        resumeUrl: {
+            type: String,
+            default: null
+        },
 
-    isPlaced: {
-      type: Boolean,
-      default: false
-    },
+        isPlaced: {
+            type: Boolean,
+            default: false
+        },
 
-    placedCompany: {
-      type: String,
-      default: null
-    },
+        placedCompany: {
+            type: String,
+            default: null
+        },
 
-    packageLpa: {
-      type: Number,
-      default: null,
-      min: 0
+        packageLpa: {
+            type: Number,
+            default: null,
+            min: 0
+        }
+    },
+    {
+        timestamps: true
     }
-  },
-  {
-    timestamps: true
-  }
-);
+)
 
-const StudentProfile = mongoose.model('StudentProfile', studentProfileSchema);
+const StudentProfile = mongoose.model('StudentProfile', studentProfileSchema)
 export default StudentProfile

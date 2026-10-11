@@ -1,33 +1,32 @@
-
-import mongoose from "mongoose";
-import { Role } from "../enum.js";
+import mongoose from 'mongoose'
+import { Role } from '../enum.js'
 const userSchema = new mongoose.Schema(
     {
-        name : {
+        name: {
             type: String,
-            required : true,
-            trim : true
+            required: true,
+            trim: true
         },
 
-        email : {
+        email: {
             type: String,
-            required : true,
-            unique : true,
-            lowercase : true,
-            trim : true
-        },
-        
-        password : {
-            type: String,
-            required : true,
-            minlength : 4
+            required: true,
+            unique: true,
+            lowercase: true,
+            trim: true
         },
 
-        role : {
+        password: {
             type: String,
-            enum : Object.values(Role),
-            default : Role.STUDENT,
-            required : true
+            required: true,
+            minlength: 4
+        },
+
+        role: {
+            type: String,
+            enum: Object.values(Role),
+            default: Role.STUDENT,
+            required: true
         }
     },
     {
@@ -35,6 +34,5 @@ const userSchema = new mongoose.Schema(
     }
 )
 
-
-const User = mongoose.model('User',userSchema)
-export default User 
+const User = mongoose.model('User', userSchema)
+export default User
