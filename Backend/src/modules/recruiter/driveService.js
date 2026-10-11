@@ -75,7 +75,7 @@ const updateDrive = async (recruiterId, driveId, body) => {
   const drive = await JobDrive.findOneAndUpdate(
     { _id: driveId, companyId: company._id },
     { $set: driveData },
-    { new: true, runValidators: true }
+    { returnDocument: 'after', runValidators: true }
   ).populate('companyId', companySummaryFields);
 
   if (!drive) {
@@ -118,7 +118,7 @@ const updateDriveStatus = async (recruiterId, driveId, body) => {
   const drive = await JobDrive.findOneAndUpdate(
     { _id: driveId, companyId: company._id, status: existingDrive.status },
     { $set: { status: requestedStatus } },
-    { new: true, runValidators: true }
+    { returnDocument: 'after', runValidators: true }
   ).populate('companyId', companySummaryFields);
 
   if (!drive) {

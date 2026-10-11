@@ -1,6 +1,6 @@
 import { getToken } from '../adapters/authAdapter.js';
 
-const API_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:5001/api').replace(/\/$/, '');
+const API_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:4000/api/v1').replace(/\/$/, '');
 
 export class ApiError extends Error {
   constructor(message, status, code, details) {

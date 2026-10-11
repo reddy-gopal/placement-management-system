@@ -16,7 +16,7 @@ const upsertCompany = async (recruiterId, body) => {
   return Company.findOneAndUpdate(
     { recruiterId },
     { $set: companyData, $setOnInsert: { recruiterId } },
-    { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
+    { returnDocument: 'after', upsert: true, runValidators: true, setDefaultsOnInsert: true }
   );
 };
 

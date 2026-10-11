@@ -33,10 +33,13 @@ export const applyUpdates = (doc, data, fields) => {
     }
 }
 
-export const generateToken = (user) =>
-    jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
+export const generateToken = (user) => {
+    if (!process.env.JWT_SECRET) throw createError('JWT_SECRET is not configured', 500)
+
+    return jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES || '7d'
     })
+}
 
 export const userDtoHelper = (user) => ({
     id: user._id,

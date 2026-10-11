@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "node --test",
+    "test:m1": "node --test test/m1/*.test.js",
+    "test:m1:m3:db": "node --test integration/m1M3*.integration.js",
     "test:m3": "node --test test/m3/*.test.js",
     "test:m3:db": "node --test integration/*.integration.js",
     "dev": "node src/server.js",

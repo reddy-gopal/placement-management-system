@@ -75,6 +75,8 @@ router.get('/admin/drives', authenticate, adminOnly, AdminController.getAllDrive
 router.get('/admin/applications', authenticate, adminOnly, AdminController.getAllApplications)
 
 // M3 is isolated behind the M1 authentication contract (req.user.id + role).
-router.use('/recruiter', authenticate, recruiterRouter)
+// recruiterOnly reloads the user from MongoDB, so revoked or changed roles
+// cannot continue using a stale recruiter JWT.
+router.use('/recruiter', authenticate, recruiterOnly, recruiterRouter)
 
 export default router
