@@ -7,7 +7,8 @@ import { generateToken, userDtoHelper, emailHelper } from '../helper.js'
 export const register = async ({ name, email, password, role } = {}) => {
     if (typeof name !== 'string' || !name.trim()) throw createError('Name is required')
     email = emailHelper(email)
-    if (typeof password !== 'string' || password.length < 4) throw createError('Password must be at least 4 characters')
+    if (typeof password !== 'string' || password.length < 8)
+        throw createError('Password must be at least 8 characters')
     if (role !== undefined && ![Role.STUDENT, Role.RECRUITER].includes(role))
         throw createError('Role must be STUDENT or RECRUITER')
 
@@ -15,7 +16,13 @@ export const register = async ({ name, email, password, role } = {}) => {
     if (existUser) throw createError('User with this email already exists', 409)
 
     const hashcode = await bcrypt.hash(password, 10)
-    const user = await User.create({ name, email, password: hashcode, role: role || Role.STUDENT })
+    let user
+    try {
+        user = await User.create({ name: name.trim(), email, password: hashcode, role: role || Role.STUDENT })
+    } catch (error) {
+        if (error?.code === 11000) throw createError('User with this email already exists', 409)
+        throw error
+    }
 
     return { user: userDtoHelper(user), token: generateToken(user) }
 }
@@ -24,7 +31,7 @@ export const login = async ({ email, password } = {}) => {
     email = emailHelper(email)
     if (typeof password !== 'string' || !password) throw createError('Password is required')
 
-    const user = await User.findOne({ email })
+    const user = await User.findOne({ email }).select('+password')
     if (!user) throw createError('Invalid email or password', 401)
 
     const passwordMatch = await bcrypt.compare(password, user.password)

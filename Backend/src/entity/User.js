@@ -5,7 +5,9 @@ const userSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
+            minlength: 2,
+            maxlength: 120
         },
 
         email: {
@@ -13,13 +15,16 @@ const userSchema = new mongoose.Schema(
             required: true,
             unique: true,
             lowercase: true,
-            trim: true
+            trim: true,
+            maxlength: 254,
+            match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
         },
 
         password: {
             type: String,
             required: true,
-            minlength: 4
+            minlength: 8,
+            select: false
         },
 
         role: {
@@ -30,7 +35,15 @@ const userSchema = new mongoose.Schema(
         }
     },
     {
-        timestamps: true
+        timestamps: true,
+        collection: 'users',
+        toJSON: {
+            transform: (_document, returnedObject) => {
+                delete returnedObject.password
+                delete returnedObject.__v
+                return returnedObject
+            }
+        }
     }
 )
 

@@ -4,21 +4,30 @@ import StudentProfile from '../entity/StudentProfile.js'
 import Company from '../entity/Company.js'
 import { Role } from '../enum.js'
 
-// Auth middleware
-export const authenticate = (req, res, next) => {
+// M1 authentication contract. Every authenticated feature receives
+// req.user = { id, email, role } from the signed JWT.
+export const requireAuth = (allowedRoles = []) => (req, res, next) => {
     const authHeader = req.headers.authorization
 
     if (!authHeader || !authHeader.startsWith('Bearer '))
         return res.status(401).json({ success: false, message: 'Authentication token required' })
 
     try {
-        req.user = jwt.verify(authHeader.split(' ')[1], process.env.JWT_SECRET)
+        const decoded = jwt.verify(authHeader.slice(7), process.env.JWT_SECRET)
+        if (!decoded?.id || !decoded?.role)
+            return res.status(401).json({ success: false, message: 'Invalid authentication token' })
+
+        if (allowedRoles.length && !allowedRoles.includes(decoded.role))
+            return res.status(403).json({ success: false, message: 'Access denied. Insufficient permissions.' })
+
+        req.user = decoded
+        return next()
     } catch {
         return res.status(401).json({ success: false, message: 'Invalid or expired token' })
     }
-
-    next()
 }
+
+export const authenticate = requireAuth()
 
 // Student middleware
 export const studentOnly = async (req, res, next) => {

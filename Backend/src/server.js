@@ -17,10 +17,16 @@ app.use((req, res) => {
 })
 
 app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err)
+        return res.status(400).json({ success: false, message: 'Request body contains invalid JSON' })
     if (err.name === 'CastError') return res.status(400).json({ success: false, message: `Invalid ${err.path}` })
     if (err.name === 'ValidationError') return res.status(400).json({ success: false, message: err.message })
+    if (err.code === 11000)
+        return res.status(409).json({ success: false, message: 'A record with these unique details already exists' })
 
-    res.status(err.statusCode || err.status || 500).json({ success: false, message: err.message })
+    const status = err.statusCode || err.status || 500
+    const message = status >= 500 ? 'Internal server error' : err.message
+    return res.status(status).json({ success: false, message })
 })
 
 const port = process.env.PORT || 4000
