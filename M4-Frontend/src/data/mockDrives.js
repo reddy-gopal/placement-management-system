@@ -1,0 +1,215 @@
+/**
+ * Mock placement drives dataset for offline preview and resilient testing.
+ * Strictly adheres to JobDrive Mongoose schema in docs/05-data-model.md & Backend/src/entity/JobDrive.js.
+ */
+
+export const MOCK_DRIVES = [
+  {
+    _id: 'drive-001',
+    title: 'Software Development Engineer - I',
+    companyId: {
+      _id: 'comp-001',
+      name: 'Google India',
+      industry: 'Technology & Cloud',
+      website: 'https://careers.google.com',
+      logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg',
+    },
+    description:
+      'Join Google Engineering to build distributed, high-scale services powering search, infrastructure, and next-gen AI capabilities. You will design, develop, test, deploy, and maintain scalable software solutions.',
+    packageLpa: 32.5,
+    location: 'Bangalore / Hyderabad',
+    employmentType: 'FULL_TIME',
+    status: 'OPEN',
+    deadline: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days from now
+    eligibility: {
+      minCgpa: 8.0,
+      maxBacklogs: 0,
+      allowedBranches: ['CSE', 'IT', 'ECE'],
+    },
+    skillsRequired: ['Data Structures', 'Algorithms', 'System Design', 'C++', 'Java', 'Python'],
+    selectionProcess: ['Online Assessment (DSA)', 'Technical Round 1', 'Technical Round 2', 'Googleyness & Leadership'],
+    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: 'drive-002',
+    title: 'Associate Software Engineer',
+    companyId: {
+      _id: 'comp-002',
+      name: 'Microsoft IDC',
+      industry: 'Enterprise Software & Cloud',
+      website: 'https://careers.microsoft.com',
+      logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg',
+    },
+    description:
+      'We are looking for passionate problem solvers to join Microsoft Cloud & AI team. You will write clean, well-tested code in C#, TypeScript, and Go, working directly on Azure enterprise microservices.',
+    packageLpa: 27.0,
+    location: 'Hyderabad / Noida',
+    employmentType: 'FULL_TIME',
+    status: 'OPEN',
+    deadline: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days from now (urgent)
+    eligibility: {
+      minCgpa: 7.5,
+      maxBacklogs: 0,
+      allowedBranches: ['CSE', 'IT', 'ECE', 'EEE'],
+    },
+    skillsRequired: ['OOP', 'Cloud Computing', 'C#', 'SQL', 'Problem Solving'],
+    selectionProcess: ['Cognitive & Coding Test', 'Technical Interview 1', 'Technical Interview 2', 'AA Round'],
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: 'drive-003',
+    title: 'Software Development Intern (6 Months)',
+    companyId: {
+      _id: 'comp-003',
+      name: 'Amazon Web Services',
+      industry: 'Cloud Infrastructure & E-Commerce',
+      website: 'https://amazon.jobs',
+      logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg',
+    },
+    description:
+      '6-Month SDE Internship leading to pre-placement offer (PPO). Work alongside senior engineers to design and deliver resilient cloud APIs processing millions of transactions per second.',
+    packageLpa: 18.0,
+    location: 'Bangalore',
+    employmentType: 'INTERNSHIP',
+    status: 'OPEN',
+    deadline: new Date(Date.now() + 18 * 60 * 60 * 1000).toISOString(), // 18 hours from now (very urgent)
+    eligibility: {
+      minCgpa: 7.0,
+      maxBacklogs: 0,
+      allowedBranches: ['CSE', 'IT', 'ECE'],
+    },
+    skillsRequired: ['Java', 'Algorithms', 'Databases', 'REST APIs', 'AWS'],
+    selectionProcess: ['HackerRank Assessment', 'System Fundamentals Interview', 'Managerial Round'],
+    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: 'drive-004',
+    title: 'Technology Analyst - Global Markets',
+    companyId: {
+      _id: 'comp-004',
+      name: 'Goldman Sachs',
+      industry: 'Investment Banking & FinTech',
+      website: 'https://goldmansachs.com/careers',
+      logoUrl: '',
+    },
+    description:
+      'Goldman Sachs Engineering develops next-generation trading platforms, risk systems, and client interfaces. Ideal for analytical minds with strong mathematical and programming foundations.',
+    packageLpa: 24.5,
+    location: 'Bangalore',
+    employmentType: 'FULL_TIME',
+    status: 'OPEN',
+    deadline: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString(),
+    eligibility: {
+      minCgpa: 8.5,
+      maxBacklogs: 0,
+      allowedBranches: ['CSE', 'IT'],
+    },
+    skillsRequired: ['C++', 'Python', 'Financial Engineering', 'Quantitative Modeling'],
+    selectionProcess: ['Math & Coding Test', 'Technical Bar Raiser', 'Hiring Manager Round'],
+    createdAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: 'drive-005',
+    title: 'Graduate Engineer Trainee (GET)',
+    companyId: {
+      _id: 'comp-005',
+      name: 'Larsen & Toubro Technology Services',
+      industry: 'Engineering & Industrial IoT',
+      website: 'https://ltts.com',
+      logoUrl: '',
+    },
+    description:
+      'Campus GET program offering rotation across Embedded Systems, Industrial Automation, Smart Manufacturing, and IoT Solutions. Open to core and circuit branches.',
+    packageLpa: 7.5,
+    location: 'Pune / Chennai / Vadodara',
+    employmentType: 'FULL_TIME',
+    status: 'OPEN',
+    deadline: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000).toISOString(),
+    eligibility: {
+      minCgpa: 6.5,
+      maxBacklogs: 1,
+      allowedBranches: ['MECH', 'ECE', 'EEE', 'CIVIL', 'CSE', 'IT'],
+    },
+    skillsRequired: ['Embedded C', 'MATLAB', 'Microcontrollers', 'AutoCAD', 'Basic Coding'],
+    selectionProcess: ['Aptitude & Technical MCQ', 'Core Technical Interview', 'HR Interview'],
+    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: 'drive-006',
+    title: 'Full Stack Product Engineer',
+    companyId: {
+      _id: 'comp-006',
+      name: 'Atlassian India',
+      industry: 'Collaboration Software',
+      website: 'https://atlassian.com',
+      logoUrl: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Atlassian-Logo-2017.svg',
+    },
+    description:
+      'Help millions of teams worldwide collaborate effortlessly with Jira, Confluence, and Trello. Build rich, high-performance web frontends and microservices.',
+    packageLpa: 22.0,
+    location: 'Remote / Bangalore',
+    employmentType: 'FULL_TIME',
+    status: 'OPEN',
+    deadline: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString(),
+    eligibility: {
+      minCgpa: 7.2,
+      maxBacklogs: 0,
+      allowedBranches: ['CSE', 'IT', 'ECE'],
+    },
+    skillsRequired: ['React', 'TypeScript', 'Node.js', 'GraphQL', 'Jest'],
+    selectionProcess: ['Coding Challenge', 'System Architecture Interview', 'Values & Team Interview'],
+    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: 'drive-007',
+    title: 'Systems & Network Software Engineer',
+    companyId: {
+      _id: 'comp-007',
+      name: 'Cisco Systems',
+      industry: 'Networking & Cybersecurity',
+      website: 'https://cisco.com',
+      logoUrl: '',
+    },
+    description:
+      'Design, configure, and automate large-scale enterprise network fabrics and security architectures. Excellent foundational training with industry-leading mentors.',
+    packageLpa: 16.0,
+    location: 'Bangalore',
+    employmentType: 'FULL_TIME',
+    status: 'OPEN',
+    deadline: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
+    eligibility: {
+      minCgpa: 7.0,
+      maxBacklogs: 1,
+      allowedBranches: ['CSE', 'IT', 'ECE', 'EEE'],
+    },
+    skillsRequired: ['Computer Networks', 'TCP/IP', 'Linux', 'Python scripting', 'C'],
+    selectionProcess: ['Online Assessment', 'Technical Round', 'Managerial & HR'],
+    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+  {
+    _id: 'drive-008',
+    title: 'Digital Systems Engineer (Ninja & Digital)',
+    companyId: {
+      _id: 'comp-008',
+      name: 'Tata Consultancy Services',
+      industry: 'IT Consulting & Services',
+      website: 'https://tcs.com',
+      logoUrl: '',
+    },
+    description:
+      'Mass campus recruitment drive for TCS Digital and Prime engineering cadres. Work on next-generation client digital transformation projects across global enterprise hubs.',
+    packageLpa: 9.0,
+    location: 'Pan India (Multiple Hubs)',
+    employmentType: 'FULL_TIME',
+    status: 'OPEN',
+    deadline: new Date(Date.now() + 12 * 24 * 60 * 60 * 1000).toISOString(),
+    eligibility: {
+      minCgpa: 6.0,
+      maxBacklogs: 1,
+      allowedBranches: ['CSE', 'IT', 'ECE', 'EEE', 'MECH', 'CIVIL'],
+    },
+    skillsRequired: ['Core Java / Python', 'DBMS', 'Aptitude & Logical Reasoning', 'Web Basics'],
+    selectionProcess: ['TCS NQT Assessment', 'Technical Interview', 'HR Round'],
+    createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
+  },
+];
