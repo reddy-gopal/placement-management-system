@@ -1,0 +1,10 @@
+node_modules/
+dist/
+coverage/
+.env
+.env.local
+*.log
+.DS_Store
+
+# Local snapshot of the client taken before the UI redesign
+client_backup_*/

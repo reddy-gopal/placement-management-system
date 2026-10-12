@@ -1,0 +1,740 @@
+@import 'tailwindcss';
+
+/*
+ * NexStep design system (docs/NexStep — Placement Platform.html, board 00).
+ * White first. Black for contrast. Neon lime only for emphasis — never as text.
+ */
+@theme {
+  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-ink: #111111;
+  --color-ink-soft: #2b2b2e;
+  --color-muted: #62626a;
+  --color-faint: #8a8a92;
+  --color-placeholder: #7a7a82;
+  --color-line: #e7e7eb;
+  --color-line-strong: #c9c9cf;
+  --color-subtle: #f7f7f8;
+  --color-lime: #c6ff00;
+  --color-violet: #9b5cff;
+  --color-cyan: #45e6e6;
+  --color-danger: #d92d36;
+  --color-success: #16803d;
+  --color-warning: #a65b00;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    background-color: #fff;
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--color-lime);
+  }
+}
+
+@layer components {
+  /* Mono uppercase label used above metrics and as section eyebrows. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* Buttons: black primary with a lime underline on hover; white secondary. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 16px;
+    border-radius: 6px;
+    border: 1px solid var(--color-ink);
+    background: var(--color-ink);
+    color: #fff;
+    font: 500 14px/1 var(--font-sans);
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.15s, box-shadow 0.15s, border-color 0.15s;
+  }
+  .btn:hover {
+    background: var(--color-ink-soft);
+    box-shadow: inset 0 -2px 0 var(--color-lime);
+  }
+  .btn-secondary {
+    background: #fff;
+    color: var(--color-ink);
+    border-color: var(--color-line);
+  }
+  .btn-secondary:hover {
+    background: #fff;
+    border-color: var(--color-ink);
+    box-shadow: none;
+  }
+  .btn-danger {
+    background: #fff;
+    color: var(--color-danger);
+    border-color: #f0c4c6;
+  }
+  .btn-danger:hover {
+    background: #fdf0f0;
+    box-shadow: none;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-ink);
+    border-color: transparent;
+  }
+  .btn-ghost:hover {
+    background: var(--color-subtle);
+    box-shadow: none;
+  }
+  .btn-sm {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
+  }
+  .btn:disabled,
+  .btn[aria-disabled='true'] {
+    background: var(--color-subtle);
+    color: var(--color-faint);
+    border-color: var(--color-line);
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+  .btn:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--color-lime);
+  }
+
+  /* Text inputs and selects. */
+  .input {
+    display: block;
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--color-ink);
+    font: 400 14px var(--font-sans);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .input:hover {
+    border-color: var(--color-line-strong);
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--color-ink);
+    box-shadow: 0 0 0 3px rgb(198 255 0 / 0.9);
+  }
+  .input::placeholder {
+    color: var(--color-placeholder);
+  }
+  .input:disabled {
+    background: var(--color-subtle);
+    color: var(--color-muted);
+    cursor: not-allowed;
+  }
+  .input-error,
+  .input-error:hover {
+    border-color: var(--color-danger);
+  }
+  .input-error:focus {
+    border-color: var(--color-danger);
+  }
+
+  .field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+  .field-hint {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--color-muted);
+  }
+
+  /* Status badge: mono caps with a leading dot in the current colour. */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 4px;
+    border: 1px solid var(--color-line);
+    background: var(--color-subtle);
+    color: var(--color-ink);
+    font: 500 11px/1 var(--font-mono);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    flex: none;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .badge-success {
+    color: var(--color-success);
+    background: #eef8f1;
+    border-color: #c5e6cf;
+  }
+  .badge-warning {
+    color: var(--color-warning);
+    background: #fff6e9;
+    border-color: #f3d9b1;
+  }
+  .badge-danger {
+    color: var(--color-danger);
+    background: #fdf1f1;
+    border-color: #f3c6c8;
+  }
+  .badge-open {
+    background: #fff;
+  }
+  .badge-open::before {
+    background: var(--color-lime);
+    box-shadow: 0 0 0 1px var(--color-ink);
+  }
+
+  /* Removable tag (skills). */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 6px 0 10px;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    background: #fff;
+    font-size: 13px;
+  }
+
+  /* Sidebar navigation link with a square dot marker; lime when active. */
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 6px;
+    color: var(--color-muted);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .nav-link:hover {
+    background: var(--color-subtle);
+    color: var(--color-ink);
+  }
+  .nav-link.active {
+    background: var(--color-subtle);
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+  .nav-dot {
+    width: 6px;
+    height: 6px;
+    flex: none;
+    border-radius: 2px;
+    background: #d4d4d9;
+  }
+  .nav-link.active .nav-dot {
+    background: var(--color-lime);
+    box-shadow: 0 0 0 1px var(--color-ink);
+  }
+
+  /* Status badges keyed by the API's status values: <span class="badge status-SHORTLISTED">. */
+  .status-APPLIED {
+    background: var(--color-subtle);
+  }
+  .status-SHORTLISTED,
+  .status-PENDING {
+    color: var(--color-warning);
+    background: #fff6e9;
+    border-color: #f3d9b1;
+  }
+  .status-SELECTED,
+  .status-ACCEPTED,
+  .status-PLACED {
+    color: var(--color-success);
+    background: #eef8f1;
+    border-color: #c5e6cf;
+  }
+  .status-REJECTED,
+  .status-DECLINED {
+    color: var(--color-danger);
+    background: #fdf1f1;
+    border-color: #f3c6c8;
+  }
+  .status-OPEN {
+    background: #fff;
+  }
+  .status-OPEN::before {
+    background: var(--color-lime);
+    box-shadow: 0 0 0 1px var(--color-ink);
+  }
+  .status-DRAFT {
+    background: #fff;
+    border-style: dashed;
+    color: var(--color-muted);
+  }
+  .status-CLOSED,
+  .status-EXPIRED {
+    color: var(--color-muted);
+  }
+  .status-CANCELLED {
+    color: var(--color-danger);
+    background: #fff;
+    border-color: #f3c6c8;
+  }
+
+  textarea.input {
+    height: auto;
+    padding: 10px 12px;
+    line-height: 1.55;
+    resize: vertical;
+  }
+
+  /* Filter chip (toggleable). Lime fill when selected. */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 6px;
+    border: 1px solid var(--color-line);
+    background: #fff;
+    color: var(--color-ink);
+    font: 500 13px/1 var(--font-sans);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .chip:hover {
+    border-color: var(--color-ink);
+  }
+  .chip.on,
+  .chip[aria-pressed='true'] {
+    background: var(--color-lime);
+    border-color: var(--color-ink);
+  }
+  .chip .count {
+    font: 500 11px var(--font-mono);
+    color: var(--color-muted);
+  }
+  .chip.on .count,
+  .chip[aria-pressed='true'] .count {
+    color: var(--color-ink);
+  }
+
+  /* Underlined tabs with a count pill. */
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 4px;
+    margin-right: 20px;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--color-muted);
+    font: 500 14px var(--font-sans);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .tab:hover {
+    color: var(--color-ink);
+  }
+  .tab.on,
+  .tab[aria-selected='true'] {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
+  }
+  .tab .count {
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--color-line);
+    background: var(--color-subtle);
+    color: var(--color-ink);
+    font: 500 11px var(--font-mono);
+  }
+  .tab.on .count,
+  .tab[aria-selected='true'] .count {
+    background: var(--color-lime);
+    border-color: var(--color-ink);
+  }
+
+  /* Segmented control (sign in / create account). */
+  .segmented {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 8px;
+    background: var(--color-subtle);
+  }
+  .segmented button {
+    flex: 1;
+    height: 40px;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--color-muted);
+    font: 500 14px var(--font-sans);
+    cursor: pointer;
+  }
+  .segmented button:hover {
+    color: var(--color-ink);
+  }
+  .segmented button[aria-selected='true'] {
+    background: #fff;
+    color: var(--color-ink);
+    box-shadow: 0 0 0 1px var(--color-line), 0 1px 2px rgb(17 17 17 / 0.06);
+  }
+
+  /* Large selectable card (radio/checkbox inside a label). */
+  .choice {
+    display: flex;
+    flex: 1;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 14px;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .choice:hover {
+    border-color: var(--color-ink);
+  }
+  .choice:has(input:checked),
+  .choice.on {
+    border-color: var(--color-ink);
+    box-shadow: inset 0 0 0 1px var(--color-ink);
+  }
+  .choice input {
+    margin: 2px 0 0;
+    accent-color: var(--color-ink);
+  }
+
+  /* Compact checkbox pill (allowed branches). */
+  .check-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    background: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .check-pill:has(input:checked) {
+    border-color: var(--color-ink);
+    background: var(--color-subtle);
+  }
+  .check-pill input {
+    width: 15px;
+    height: 15px;
+    margin: 0;
+    accent-color: var(--color-ink);
+  }
+
+  /* Square icon button (notifications, row menus). */
+  .icon-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--color-ink);
+    cursor: pointer;
+  }
+  .icon-btn:hover {
+    border-color: var(--color-ink);
+  }
+  .icon-btn-sm {
+    width: 32px;
+    height: 32px;
+  }
+
+  /* Search field with leading icon. */
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--color-muted);
+    font-size: 13px;
+  }
+  .search:focus-within {
+    border-color: var(--color-ink);
+    box-shadow: 0 0 0 3px rgb(198 255 0 / 0.9);
+  }
+  .search input {
+    min-width: 0;
+    flex: 1;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--color-ink);
+    font: 400 13px var(--font-sans);
+  }
+
+  /* Company monogram tile. */
+  .logo-tile {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    background: var(--color-subtle);
+    color: var(--color-ink);
+    font: 600 13px var(--font-sans);
+    overflow: hidden;
+  }
+  .logo-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #fff;
+  }
+
+  /* On/off switch; lime when on. */
+  .toggle {
+    position: relative;
+    flex: none;
+    width: 36px;
+    height: 20px;
+    padding: 0;
+    border: 1px solid var(--color-ink);
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--color-ink);
+    transition: left 0.15s;
+  }
+  .toggle[aria-checked='true'] {
+    background: var(--color-lime);
+  }
+  .toggle[aria-checked='true']::after {
+    left: 18px;
+  }
+
+  /* Pagination button. */
+  .page-btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid var(--color-line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--color-ink);
+    font: 500 13px var(--font-sans);
+    cursor: pointer;
+  }
+  .page-btn:hover:not(:disabled) {
+    border-color: var(--color-ink);
+  }
+  .page-btn[aria-current='page'] {
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+    color: #fff;
+  }
+  .page-btn:disabled {
+    color: var(--color-faint);
+    cursor: not-allowed;
+  }
+
+  /* Dropdown menu item. */
+  .menu-item {
+    display: block;
+    width: 100%;
+    padding: 9px 10px;
+    border: 0;
+    border-radius: 4px;
+    background: none;
+    color: var(--color-ink);
+    font: 500 13px var(--font-sans);
+    text-align: left;
+    cursor: pointer;
+  }
+  .menu-item:hover {
+    background: var(--color-subtle);
+  }
+  .menu-item:disabled {
+    color: var(--color-faint);
+    cursor: not-allowed;
+    background: none;
+  }
+
+  /* Table-like rows: hairline top border, faint hover. */
+  .data-row {
+    border-top: 1px solid var(--color-line);
+  }
+  .data-row:hover {
+    background: #fafafb;
+  }
+  .data-head {
+    background: var(--color-subtle);
+    font: 500 11px var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  /* Big metric number. */
+  .metric-value {
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  /* Long-form description text. */
+  .prose-body {
+    font-size: 15px;
+    line-height: 1.65;
+    color: #2a2a2e;
+    white-space: pre-line;
+  }
+
+  /* Text-style link button. */
+  .link {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+  }
+  .link:hover {
+    color: var(--color-muted);
+  }
+
+  /* Lime highlighter stroke behind a word or number. */
+  .highlight {
+    background: linear-gradient(transparent 60%, var(--color-lime) 60%, var(--color-lime) 92%, transparent 92%);
+  }
+
+  /* Skeleton shimmer. */
+  .skeleton {
+    border-radius: 4px;
+    background: linear-gradient(90deg, #f2f2f4 0, #e8e8eb 50%, #f2f2f4 100%);
+    background-size: 200% 100%;
+    animation: skeleton 1.4s linear infinite;
+  }
+}
+
+@keyframes skeleton {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.animate-modal-in {
+  animation: modal-in 160ms ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 160ms ease-out;
+}
+
+.animate-drawer-in {
+  animation: drawer-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-modal-in,
+  .animate-fade-in,
+  .animate-drawer-in,
+  .skeleton {
+    animation: none;
+  }
+}
