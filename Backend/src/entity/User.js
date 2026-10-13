@@ -27,6 +27,21 @@ const userSchema = new mongoose.Schema(
             enum: Object.values(Role),
             default: Role.STUDENT,
             required: true
+        },
+
+        isVerified: {
+            type: Boolean,
+            default: false
+        },
+
+        verificationCode: {
+            type: String,
+            default: null
+        },
+
+        verificationCodeExpires: {
+            type: Date,
+            default: null
         }
     },
     {

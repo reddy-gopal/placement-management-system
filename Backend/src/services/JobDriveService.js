@@ -5,6 +5,7 @@ import Application from '../entity/Application.js'
 import { Role, JobDriveStatus, EmploymentType, OfferStatus } from '../enum.js'
 import { createError } from '../utils/errors.js'
 import { withEligibility, validateDriveFields, canEditDrive, escapeRegex } from '../helper.js'
+import { sendDriveUpdateEmail } from './EmailService.js'
 
 export const createDrive = async (userId, role, driveData = {}) => {
     if (![Role.RECRUITER, Role.ADMIN].includes(role))
@@ -121,7 +122,37 @@ export const updateDrive = async (driveId, userId, role, driveData) => {
     )
 
     drive.set(fields)
-    return drive.save()
+    const saved = await drive.save()
+
+    // Notify registered applicants of drive updates
+    ;(async () => {
+        try {
+            const applications = await Application.find({ driveId: drive._id }).populate({
+                path: 'studentId',
+                populate: { path: 'userId', select: 'name email' }
+            })
+            const company = await Company.findById(drive.companyId)
+            const companyName = company?.name || 'Company'
+
+            for (const app of applications) {
+                const email = app.studentId?.userId?.email
+                const studentName = app.studentId?.userId?.name
+                if (email) {
+                    await sendDriveUpdateEmail({
+                        to: email,
+                        studentName,
+                        jobTitle: drive.title,
+                        companyName,
+                        updateMessage: `The details for this drive have been updated. The application deadline is now ${new Date(drive.deadline).toLocaleDateString()}.`
+                    })
+                }
+            }
+        } catch (err) {
+            console.error('[EmailService] Failed to send drive update emails:', err.message)
+        }
+    })()
+
+    return saved
 }
 
 export const updateDriveStatus = async (driveId, userId, role, status) => {
@@ -139,7 +170,39 @@ export const updateDriveStatus = async (driveId, userId, role, status) => {
     if (drive.status === JobDriveStatus.CANCELLED) throw createError('A cancelled drive cannot be changed')
 
     drive.status = status
-    return drive.save()
+    const saved = await drive.save()
+
+    if (status === JobDriveStatus.CANCELLED) {
+        // Notify applicants if drive is cancelled
+        ;(async () => {
+            try {
+                const applications = await Application.find({ driveId: drive._id }).populate({
+                    path: 'studentId',
+                    populate: { path: 'userId', select: 'name email' }
+                })
+                const company = await Company.findById(drive.companyId)
+                const companyName = company?.name || 'Company'
+
+                for (const app of applications) {
+                    const email = app.studentId?.userId?.email
+                    const studentName = app.studentId?.userId?.name
+                    if (email) {
+                        await sendDriveUpdateEmail({
+                            to: email,
+                            studentName,
+                            jobTitle: drive.title,
+                            companyName,
+                            updateMessage: 'Notice: This placement drive has been cancelled by the recruitment cell.'
+                        })
+                    }
+                }
+            } catch (err) {
+                console.error('[EmailService] Failed to send cancellation emails:', err.message)
+            }
+        })()
+    }
+
+    return saved
 }
 
 export const deleteDrive = async (driveId, role) => {

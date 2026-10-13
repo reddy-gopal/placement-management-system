@@ -33,6 +33,7 @@ export default function App() {
     <Routes>
       <Route path="/login" element={<AuthPage mode="login" />} />
       <Route path="/signup" element={<AuthPage mode="signup" />} />
+      <Route path="/verify" element={<AuthPage mode="verify" />} />
 
       <Route element={<ProtectedRoute roles={['STUDENT']} />}>
         <Route path="/student" element={<DashboardLayout role="STUDENT" />}>

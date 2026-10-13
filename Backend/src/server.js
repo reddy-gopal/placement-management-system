@@ -20,7 +20,13 @@ app.use((err, req, res, next) => {
     if (err.name === 'CastError') return res.status(400).json({ success: false, message: `Invalid ${err.path}` })
     if (err.name === 'ValidationError') return res.status(400).json({ success: false, message: err.message })
 
-    res.status(err.statusCode || err.status || 500).json({ success: false, message: err.message })
+    const response = { success: false, message: err.message }
+    if (err.needsVerification) {
+        response.needsVerification = true
+        if (err.email) response.email = err.email
+    }
+
+    res.status(err.statusCode || err.status || 500).json(response)
 })
 
 const port = process.env.PORT || 4000

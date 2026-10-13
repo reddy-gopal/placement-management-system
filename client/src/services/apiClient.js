@@ -6,11 +6,13 @@ export const NETWORK_ERROR_MESSAGE = 'Unable to connect to the server. Please tr
 export const SESSION_ERROR_MESSAGE = 'You are not logged in or your session has expired. Please log in again.';
 
 export class ApiError extends Error {
-  constructor(message, { status = 0, errors = null } = {}) {
+  constructor(message, { status = 0, errors = null, needsVerification = false, email = null } = {}) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
     this.errors = errors; // field -> message, when the server returns validation details
+    this.needsVerification = needsVerification;
+    this.email = email;
   }
 }
 
@@ -65,6 +67,8 @@ export async function apiRequest(path, { method = 'GET', body } = {}) {
     throw new ApiError(data?.message || fallback, {
       status: response.status,
       errors: data?.errors || null,
+      needsVerification: Boolean(data?.needsVerification),
+      email: data?.email || null,
     });
   }
 
