@@ -19,6 +19,9 @@ const router = express.Router()
 // Auth routes
 router.post('/auth/signup', AuthController.signup)
 router.post('/auth/login', AuthController.login)
+router.post('/auth/verify-email', AuthController.verifyEmail)
+router.post('/auth/resend-code', AuthController.resendCode)
+router.post('/auth/test-email', AuthController.testEmail)
 router.get('/auth/me', authenticate, AuthController.me)
 
 // Student routes

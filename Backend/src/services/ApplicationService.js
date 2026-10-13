@@ -2,9 +2,16 @@ import Application from '../entity/Application.js'
 import StudentProfile from '../entity/StudentProfile.js'
 import JobDrive from '../entity/JobDrive.js'
 import Company from '../entity/Company.js'
+import User from '../entity/User.js'
 import { Role, ApplicationStatus, JobDriveStatus, OfferStatus } from '../enum.js'
 import { createError } from '../utils/errors.js'
 import { canChangeStatus, expireOverdueOffers, getEligibilityIssues, getOfferDeadline } from '../helper.js'
+import {
+    sendApplicationSubmittedEmail,
+    sendInterviewScheduledEmail,
+    sendOfferEmail,
+    sendApplicationStatusUpdateEmail
+} from './EmailService.js'
 
 export const applyForDrive = async (student, driveId) => {
     if (!driveId) throw createError('driveId is required')
@@ -23,12 +30,34 @@ export const applyForDrive = async (student, driveId) => {
     const alreadyApplied = await Application.exists({ driveId: drive._id, studentId: student._id })
     if (alreadyApplied) throw createError('You have already applied for this drive', 409)
 
-    return Application.create({
+    const application = await Application.create({
         driveId: drive._id,
         studentId: student._id,
         resumeUrl: student.resumeUrl,
         status: ApplicationStatus.APPLIED
     })
+
+    // Send application confirmation email asynchronously
+    ;(async () => {
+        try {
+            const user = await User.findById(student.userId)
+            const company = await Company.findById(drive.companyId)
+            if (user?.email) {
+                await sendApplicationSubmittedEmail({
+                    to: user.email,
+                    studentName: user.name,
+                    jobTitle: drive.title,
+                    companyName: company?.name || 'Company',
+                    packageLpa: drive.packageLpa,
+                    location: drive.location
+                })
+            }
+        } catch (err) {
+            console.error('[EmailService] Failed to send application confirmation:', err.message)
+        }
+    })()
+
+    return application
 }
 
 export const getMyApplications = async (student) => {
@@ -110,7 +139,53 @@ export const updateApplicationStatus = async (
     }
 
     application.status = status
-    return application.save()
+    const saved = await application.save()
+
+    // Trigger email notifications asynchronously
+    ;(async () => {
+        try {
+            const student = await StudentProfile.findById(application.studentId).populate('userId', 'name email')
+            const drive = await JobDrive.findById(application.driveId).populate('companyId', 'name')
+            const studentEmail = student?.userId?.email
+            const studentName = student?.userId?.name
+            const companyName = drive?.companyId?.name || 'Company'
+
+            if (studentEmail) {
+                if (status === ApplicationStatus.SHORTLISTED) {
+                    await sendInterviewScheduledEmail({
+                        to: studentEmail,
+                        studentName,
+                        jobTitle: drive?.title,
+                        companyName,
+                        scheduledAt: application.interview?.scheduledAt,
+                        meetingLink: application.interview?.meetingLink,
+                        notes: application.interview?.notes
+                    })
+                } else if (status === ApplicationStatus.SELECTED) {
+                    await sendOfferEmail({
+                        to: studentEmail,
+                        studentName,
+                        jobTitle: drive?.title,
+                        companyName,
+                        packageLpa: drive?.packageLpa,
+                        offerDeadline: application.offer?.deadline
+                    })
+                } else if (status === ApplicationStatus.REJECTED) {
+                    await sendApplicationStatusUpdateEmail({
+                        to: studentEmail,
+                        studentName,
+                        jobTitle: drive?.title,
+                        companyName,
+                        status: ApplicationStatus.REJECTED
+                    })
+                }
+            }
+        } catch (err) {
+            console.error('[EmailService] Failed to send status notification:', err.message)
+        }
+    })()
+
+    return saved
 }
 
 export const respondToOffer = async (student, applicationId, decision) => {

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Video } from 'lucide-react';
 import StatusBadge from '../ui/StatusBadge';
 import ApplicationProgress from './ApplicationProgress';
 import { applicationCompany, lpaLabel } from './studentPortal';
@@ -55,26 +55,30 @@ function OfferCard({ application, onAccept, onDecline }) {
 
 function InterviewCard({ interview }) {
   return (
-    <div className="flex flex-col gap-3 rounded-lg border border-ink p-4">
+    <div className="flex flex-col gap-3.5 rounded-lg border border-ink p-4 bg-white shadow-sm">
       <div className="flex items-center justify-between gap-3">
-        <span className="eyebrow text-ink">Interview</span>
+        <span className="eyebrow text-ink flex items-center gap-1.5">
+          <Video className="h-3.5 w-3.5 text-lime-600" />
+          Online Interview
+        </span>
         {interviewPill(interview.scheduledAt)}
       </div>
       <p className="text-[17px] font-semibold lg:text-[15px]">{formatDateTime(interview.scheduledAt)}</p>
       {interview.meetingLink && (
-        <>
+        <div className="flex flex-col gap-2 pt-1">
           <a
             href={interview.meetingLink}
             target="_blank"
             rel="noreferrer"
-            className="hidden break-all text-[13px] underline underline-offset-2 hover:text-muted lg:inline"
+            className="btn flex items-center justify-center gap-2 h-11 w-full bg-[#0f172a] text-white hover:bg-slate-800 transition-colors"
           >
-            {interview.meetingLink}
+            <Video className="h-4 w-4" />
+            Join Online Meeting ↗
           </a>
-          <a href={interview.meetingLink} target="_blank" rel="noreferrer" className="btn h-12 w-full lg:hidden">
-            Join meeting ↗
-          </a>
-        </>
+          <span className="text-[11px] text-muted truncate text-center" title={interview.meetingLink}>
+            Link: {interview.meetingLink}
+          </span>
+        </div>
       )}
       {interview.notes && (
         <p className="border-t border-line pt-2.5 text-[13px] leading-relaxed text-muted">

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Sparkles, Video } from 'lucide-react';
 import Modal from '../ui/Modal';
 import Alert from '../ui/Alert';
 import FormField, { describedBy, inputClassName } from '../ui/FormField';
@@ -154,9 +155,35 @@ export function ShortlistDialog({ application, drive, onClose, onConfirm }) {
               <input type="time" {...input('time')} />
             </FormField>
           </div>
-          <FormField id="iv-meetingLink" label="Meeting link" error={errors.meetingLink}>
-            <input type="url" placeholder="https://" {...input('meetingLink')} />
-          </FormField>
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between">
+              <label htmlFor="iv-meetingLink" className="field-label">
+                Meeting link
+              </label>
+              <button
+                type="button"
+                onClick={() => {
+                  const cleanDrive = (drive?.title || 'Drive').replace(/[^a-zA-Z0-9]/g, '');
+                  const cleanName = (name || 'Candidate').replace(/[^a-zA-Z0-9]/g, '');
+                  const randomSuffix = Math.random().toString(36).substring(2, 7);
+                  update('meetingLink', `https://meet.jit.si/NexStep-${cleanDrive}-${cleanName}-${randomSuffix}`);
+                }}
+                className="inline-flex items-center gap-1 text-xs font-semibold text-ink hover:underline cursor-pointer"
+              >
+                <Sparkles className="h-3 w-3 text-emerald-600" />
+                Generate Jitsi Room
+              </button>
+            </div>
+            <input type="url" placeholder="https://meet.jit.si/... or Google Meet / Zoom" {...input('meetingLink')} />
+            {errors.meetingLink && (
+              <p id="iv-meetingLink-error" className="field-hint font-medium text-danger">
+                {errors.meetingLink}
+              </p>
+            )}
+            <p className="field-hint">
+              Auto-generate a free Jitsi room or paste your own Google Meet link. An email invitation will be sent to the candidate via Resend.
+            </p>
+          </div>
           <FormField id="iv-notes" label="Notes for the candidate" hint="Visible to the student in My applications.">
             <textarea rows={3} placeholder="Round, duration, what to prepare" {...input('notes', { hint: true })} />
           </FormField>

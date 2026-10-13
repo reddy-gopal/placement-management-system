@@ -42,8 +42,13 @@ export const userDtoHelper = (user) => ({
     id: user._id,
     name: user.name,
     email: user.email,
-    role: user.role
+    role: user.role,
+    isVerified: Boolean(user.isVerified)
 })
+
+export const generateVerificationCode = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString()
+}
 
 export const emailHelper = (email) => {
     if (typeof email !== 'string' || !email.trim()) throw createError('Email is required')

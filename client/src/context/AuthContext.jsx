@@ -61,7 +61,18 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = useCallback(async (credentials) => startSession(await authApi.login(credentials)), [startSession]);
-  const signup = useCallback(async (details) => startSession(await authApi.signup(details)), [startSession]);
+  const signup = useCallback(
+    async (details) => {
+      const result = await authApi.signup(details);
+      if (result.token && result.user) {
+        return startSession(result);
+      }
+      return result;
+    },
+    [startSession]
+  );
+  const verifyEmail = useCallback(async (credentials) => startSession(await authApi.verifyEmail(credentials)), [startSession]);
+  const resendCode = useCallback(async (email) => authApi.resendVerificationCode({ email }), []);
 
   const logout = useCallback(() => {
     clearAuthToken();
@@ -71,8 +82,8 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = useMemo(
-    () => ({ user, status, sessionExpired, login, signup, logout }),
-    [user, status, sessionExpired, login, signup, logout]
+    () => ({ user, status, sessionExpired, login, signup, verifyEmail, resendCode, logout }),
+    [user, status, sessionExpired, login, signup, verifyEmail, resendCode, logout]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

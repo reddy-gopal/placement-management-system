@@ -27,6 +27,8 @@ export const studentOnly = async (req, res, next) => {
     if (!user) return res.status(401).json({ success: false, message: 'User not found' })
     if (user.role !== Role.STUDENT)
         return res.status(403).json({ success: false, message: 'Access denied. Student access required.' })
+    if (!user.isVerified)
+        return res.status(403).json({ success: false, message: 'Please verify your email address to continue.', needsVerification: true, email: user.email })
 
     next()
 }
@@ -47,6 +49,8 @@ export const recruiterOnly = async (req, res, next) => {
     if (!user) return res.status(401).json({ success: false, message: 'User not found' })
     if (user.role !== Role.RECRUITER)
         return res.status(403).json({ success: false, message: 'Access denied. Recruiter access required.' })
+    if (!user.isVerified)
+        return res.status(403).json({ success: false, message: 'Please verify your email address to continue.', needsVerification: true, email: user.email })
 
     next()
 }
