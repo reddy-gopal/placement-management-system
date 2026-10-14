@@ -16,12 +16,15 @@ import {
 
 const router = express.Router()
 
+// Health check (used by the hosting platform)
+router.get('/health', (req, res) => res.status(200).json({ success: true, status: 'ok' }))
+
 // Auth routes
 router.post('/auth/signup', AuthController.signup)
 router.post('/auth/login', AuthController.login)
 router.post('/auth/verify-email', AuthController.verifyEmail)
 router.post('/auth/resend-code', AuthController.resendCode)
-router.post('/auth/test-email', AuthController.testEmail)
+router.post('/auth/test-email', authenticate, adminOnly, AuthController.testEmail)
 router.get('/auth/me', authenticate, AuthController.me)
 
 // Student routes

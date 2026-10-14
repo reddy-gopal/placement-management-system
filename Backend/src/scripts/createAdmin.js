@@ -54,7 +54,6 @@ const createAdmin = async () => {
         console.log(`Role:     ${user.role}`)
         console.log(`Name:     ${user.name}`)
         console.log(`Email:    ${user.email}`)
-        console.log(`Password: ${password}`)
         console.log(`Verified: ${user.isVerified}`)
         console.log('========================================\n')
 

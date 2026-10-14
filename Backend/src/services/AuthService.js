@@ -167,5 +167,5 @@ export const getMe = async (userId) => {
 }
 
 export const sendTestEmail = async (to) => {
-    return await sendTestEmailService(to)
+    return await sendTestEmailService(emailHelper(to))
 }

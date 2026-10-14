@@ -6,7 +6,11 @@ import { connectDB } from './config/config.js'
 
 const app = express()
 
-app.use(cors())
+// CORS_ORIGIN: comma-separated list of allowed frontend origins. Unset allows any origin.
+const allowedOrigins = process.env.CORS_ORIGIN?.split(',').map((origin) => origin.trim()).filter(Boolean)
+
+app.disable('x-powered-by')
+app.use(cors({ origin: allowedOrigins?.length ? allowedOrigins : '*' }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
