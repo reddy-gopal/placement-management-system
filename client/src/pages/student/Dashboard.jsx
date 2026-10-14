@@ -48,7 +48,7 @@ function activityStamp(value) {
   const time = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }).format(date);
   return `${day} · ${time}`;
 }
-
+/**loading dashboard */
 async function loadDashboard() {
   const [profile, applications, drives] = await Promise.all([
     getStudentProfile(),
