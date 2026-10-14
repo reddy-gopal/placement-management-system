@@ -2,6 +2,7 @@
  * Pure data derivations for the placement-cell (admin) screens. Everything here works on the
  * raw /admin/* payloads and tolerates populated references that are null (deleted documents).
  */
+
 import { BRANCHES } from '../../constants/studentProfile';
 import { EMPLOYMENT_TYPE_LABELS, formatLpa } from '../../utils/format';
 
@@ -72,7 +73,7 @@ export function packageStats(students = []) {
   const average = values.reduce((sum, v) => sum + v, 0) / values.length;
   return { count: values.length, median, average, highest: values[values.length - 1] };
 }
-
+/** package bands */
 export const PACKAGE_BANDS = [
   { label: '< 5', min: 0, max: 5 },
   { label: '5–8', min: 5, max: 8 },
